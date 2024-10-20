@@ -1,44 +1,28 @@
-const list = document.getElementById('list');
-const btn = document.getElementById('btn');
+function* primeGenerator(limit) {
+    function isPrime(num) {
+        if (num < 2) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
+        }
+        return true;
+    }
 
-class SquareIterator {
-    constructor(numbers) {
-      this.numbers = numbers;
-      this.index = 0;
+    for (let num = 2; num <= limit; num++) {
+        if (isPrime(num)) {
+            yield num;
+        }
     }
-  
-    // Implementing the iterator protocol
-    next() {
-      if (this.index < this.numbers.length) {
-        const value = this.numbers[this.index] ** 2;
-        this.index++;
-        return { value, done: false };
-      } else {
-        return { done: true };
-      }
-    }
-  
-    [Symbol.iterator]() {
-      return this;
-    }
-  }
-  
-  const number = document.getElementById('numbers');
-  
-  const numbers = [1, 2, 3, 4, 5];
-  number.append(numbers);
-  const squareIterator = new SquareIterator(numbers);
-  
+}
 
-  btn.addEventListener('click', () => {
-    const { value, done } = squareIterator.next();
-    if (done) {
-        alert('done');
-        return;
+function generatePrimes() {
+    const limit = document.getElementById('limit').value;
+    const primes = primeGenerator(limit);
+    const primeList = document.getElementById('prime-list');
+
+    primeList.innerHTML = ''; 
+    for (let prime of primes) {
+        const listItem = document.createElement('li');
+        listItem.textContent = prime;
+        primeList.appendChild(listItem);
     }
-    const li = document.createElement('li');
-    li.textContent = value;
-    list.appendChild(li);
-});
-  
-  
+}
